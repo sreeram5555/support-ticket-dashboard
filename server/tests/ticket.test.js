@@ -117,4 +117,20 @@ describe('Ticket API Endpoints', () => {
     const getRes = await request(app).get(`/api/tickets/${createdTicketId}`);
     expect(getRes.statusCode).toEqual(404);
   });
+
+  it('should return 404 when deleting a non-existent ticket', async () => {
+    const deleteRes = await request(app).delete(`/api/tickets/999999`);
+    expect(deleteRes.statusCode).toEqual(404);
+    expect(deleteRes.body.success).toBe(false);
+  });
+
+  it('should return 422 when updating with whitespace-only title', async () => {
+    const res = await request(app)
+      .patch(`/api/tickets/${createdTicketId}`) // Note: it's deleted now, so it will actually return 404 if validation passes
+      .send({ title: '   ', status: 'Open' });
+    
+    // It should fail validation before checking if it exists
+    expect(res.statusCode).toEqual(422);
+    expect(res.body.success).toBe(false);
+  });
 });
