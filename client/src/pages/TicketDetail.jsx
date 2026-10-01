@@ -22,6 +22,17 @@ const TicketDetail = () => {
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        navigate(-1);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
+
+  useEffect(() => {
     const fetchTicket = async () => {
       try {
         setLoading(true);
