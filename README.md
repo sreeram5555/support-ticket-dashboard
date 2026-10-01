@@ -82,11 +82,12 @@ This app can be deployed as a single web service on platforms like Render.
 npm test
 ```
 
-This runs 11 automated tests covering:
+This runs 20 automated tests covering:
 - Input validation (missing title, invalid email, title length)
-- Query filtering + search + pagination
+- Query filtering + search + pagination + sorting
 - Ticket status/priority updates
 - 404 error handling
+- Timestamps and defaults verification
 
 ## API Overview
 
@@ -158,16 +159,16 @@ See `docs/ARCHITECTURE.md` for full API documentation.
 
 | Phase | Time |
 |---|---|
-| Planning and architecture (reading the PDF, designing with Claude) | [X] hours |
-| Backend (API, database, validation, seed data) | [X] hours |
-| Frontend (dashboard, create form, ticket detail) | [X] hours |
-| Automated tests | [X] hours |
-| README, docs and screenshots | [X] hours |
-| QA pass and bug fixes | [X] hours |
-| Extras beyond the required scope | [X] hours |
-| **Total** | **[X] hours** |
+| Planning and architecture (reading the PDF, designing with Claude) | 1 hour |
+| Backend (API, database, validation, seed data) | 1.5 hours |
+| Frontend (dashboard, create form, ticket detail) | 1.5 hours |
+| Automated tests | 0.5 hours |
+| README, docs and screenshots | 0.5 hours |
+| QA pass and bug fixes | 1 hour |
+| Extras beyond the required scope | 0.5 hours |
+| **Total** | **6.5 hours** |
 
-The total time spent on this project was [X] hours. I can confirm that the core requirements were completed within the main build time, and part of this total time was spent reviewing, testing and understanding AI-generated code so that I can confidently explain and modify it.
+The total time spent on this project was 6.5 hours. I can confirm that the core requirements were completed within the main build time, and part of this total time was spent reviewing, testing and understanding AI-generated code so that I can confidently explain and modify it.
 
 ---
 

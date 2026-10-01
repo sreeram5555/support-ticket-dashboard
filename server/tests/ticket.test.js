@@ -169,4 +169,75 @@ describe('Ticket API Endpoints', () => {
     expect(resUnderscore.body.data.length).toBe(1);
     expect(resUnderscore.body.data[0].title).toBe('Ticket with _');
   });
+  it('should verify defaults (status = Open)', async () => {
+    const res = await request(app)
+      .post('/api/tickets')
+      .send({
+        title: 'Defaults Test',
+        description: 'Test default status',
+        customer_email: 'test@example.com'
+      });
+    expect(res.statusCode).toEqual(201);
+    expect(res.body.data.status).toBe('Open');
+  });
+
+  it('should verify timestamps (created and updated)', async () => {
+    const createRes = await request(app)
+      .post('/api/tickets')
+      .send({
+        title: 'Timestamps Test',
+        description: 'Test timestamps',
+        customer_email: 'test@example.com'
+      });
+    const ticketId = createRes.body.data.id;
+    const createdAt = createRes.body.data.created_at;
+    const updatedAt = createRes.body.data.updated_at;
+    expect(createdAt).toBeTruthy();
+    expect(updatedAt).toBeTruthy();
+
+    const patchRes = await request(app)
+      .patch(`/api/tickets/${ticketId}`)
+      .send({ status: 'In Progress' });
+    expect(new Date(patchRes.body.data.updated_at).getTime()).toBeGreaterThanOrEqual(new Date(updatedAt).getTime());
+  });
+
+  it('should filter by status and priority', async () => {
+    await request(app).post('/api/tickets').send({ title: 'T1', description: 'D', customer_email: 'test@example.com', priority: 'High' });
+    await request(app).post('/api/tickets').send({ title: 'T2', description: 'D', customer_email: 'test@example.com', priority: 'Low' });
+    
+    const filterRes = await request(app).get('/api/tickets').query({ status: 'Open', priority: 'High' });
+    expect(filterRes.body.data.length).toBeGreaterThanOrEqual(1);
+    expect(filterRes.body.data.every(t => t.status === 'Open' && t.priority === 'High')).toBe(true);
+  });
+
+  it('should verify sort order both ways', async () => {
+    const ascRes = await request(app).get('/api/tickets').query({ sortBy: 'created_asc' });
+    const descRes = await request(app).get('/api/tickets').query({ sortBy: 'created_desc' });
+    
+    if (ascRes.body.data.length > 1) {
+      const ascFirst = new Date(ascRes.body.data[0].created_at).getTime();
+      const ascLast = new Date(ascRes.body.data[ascRes.body.data.length - 1].created_at).getTime();
+      expect(ascFirst).toBeLessThanOrEqual(ascLast);
+
+      const descFirst = new Date(descRes.body.data[0].created_at).getTime();
+      const descLast = new Date(descRes.body.data[descRes.body.data.length - 1].created_at).getTime();
+      expect(descFirst).toBeGreaterThanOrEqual(descLast);
+    }
+  });
+
+  it('should verify pagination limits', async () => {
+    const page2Res = await request(app).get('/api/tickets').query({ page: 2, pageSize: 2 });
+    expect(page2Res.body.data.length).toBeLessThanOrEqual(2);
+
+    const page999Res = await request(app).get('/api/tickets').query({ page: 999 });
+    expect(page999Res.body.data.length).toBe(0);
+  });
+
+  it('should verify invalid query params', async () => {
+    const badPageRes = await request(app).get('/api/tickets').query({ page: -1 });
+    expect(badPageRes.statusCode).toBe(422);
+
+    const badSortRes = await request(app).get('/api/tickets').query({ sortOrder: 'invalid' });
+    expect(badSortRes.statusCode).toBe(422);
+  });
 });

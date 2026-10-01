@@ -32,6 +32,14 @@ const validateCreateTicket = [
   body('priority')
     .optional()
     .isIn(PRIORITIES).withMessage(`Priority must be one of: ${PRIORITIES.join(', ')}`),
+  body('status')
+    .optional()
+    .custom((value) => {
+      if (value) {
+        throw new Error('Status cannot be set on creation. It defaults to Open.');
+      }
+      return true;
+    }),
   handleValidationErrors
 ];
 
@@ -51,6 +59,8 @@ const validateUpdateTicket = [
   body('priority')
     .optional()
     .isIn(PRIORITIES).withMessage(`Priority must be one of: ${PRIORITIES.join(', ')}`),
+  body('id').not().exists().withMessage('Cannot update id'),
+  body('created_at').not().exists().withMessage('Cannot update created_at'),
   (req, res, next) => {
     if (!req.body.status && !req.body.priority && !req.body.title && !req.body.description) {
       return res.status(400).json({
@@ -82,6 +92,7 @@ const validateQueryParams = [
     return true;
   }),
   query('sortOrder').optional().isIn(['asc', 'desc']).withMessage('sortOrder must be asc or desc'),
+  query('sortBy').optional().isIn(['created_asc', 'created_desc']).withMessage('sortBy must be created_asc or created_desc'),
   query('page').optional().isInt({ min: 1 }).toInt().withMessage('Page must be a positive integer'),
   query('pageSize').optional().isInt({ min: 1, max: 100 }).toInt().withMessage('pageSize must be between 1 and 100'),
   handleValidationErrors

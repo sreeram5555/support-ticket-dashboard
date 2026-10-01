@@ -50,7 +50,7 @@ const updateTicket = (id, { status, priority, title, description }) => {
   return getTicketById(id);
 };
 
-const getTickets = ({ search, status, priority, sortOrder = 'desc', page = 1, pageSize = 10 }) => {
+const getTickets = ({ search, status, priority, sortOrder = 'desc', sortBy, page = 1, pageSize = 10 }) => {
   let query = 'SELECT * FROM tickets';
   let countQuery = 'SELECT COUNT(*) as count FROM tickets';
   const conditions = [];
@@ -78,7 +78,11 @@ const getTickets = ({ search, status, priority, sortOrder = 'desc', page = 1, pa
     countQuery += whereClause;
   }
 
-  const direction = sortOrder.toLowerCase() === 'asc' ? 'ASC' : 'DESC';
+  let direction = 'DESC';
+  if (sortOrder && sortOrder.toLowerCase() === 'asc') direction = 'ASC';
+  if (sortBy === 'created_asc') direction = 'ASC';
+  if (sortBy === 'created_desc') direction = 'DESC';
+  
   query += ` ORDER BY created_at ${direction}`;
   
   const offset = (page - 1) * pageSize;
