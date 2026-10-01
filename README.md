@@ -141,22 +141,22 @@ See `docs/ARCHITECTURE.md` for full API documentation.
 
 | Phase | Time |
 |---|---|
-| Planning & architecture | 30 min |
-| Backend implementation | 30 min |
-| Frontend implementation | 30 min |
-| Testing | 10 min |
-| Documentation & polish | 10 min |
-| Extra Features & Polish (V2) | 45 min |
-| **Total** | **~2 hours 35 min** |
+| Planning and architecture (reading the PDF, designing with Claude) | [X] hours |
+| Backend (API, database, validation, seed data) | [X] hours |
+| Frontend (dashboard, create form, ticket detail) | [X] hours |
+| Automated tests | [X] hours |
+| README, docs and screenshots | [X] hours |
+| QA pass and bug fixes | [X] hours |
+| Extras beyond the required scope | [X] hours |
+| **Total** | **[X] hours** |
+
+The total time spent on this project was [X] hours. I can confirm that the core requirements were completed within the main build time, and part of this total time was spent reviewing, testing and understanding AI-generated code so that I can confidently explain and modify it.
 
 ---
 
 ## How I Used AI Tools
 
-I used Gemini to assist with:
-- **Architecture planning**: Discussed requirements mapping, identified edge cases and ambiguities, designed API contracts and error formats.
-- **Code generation**: Generated boilerplate code for the React UI and Express routing.
-- **Documentation**: AI helped draft the README structure and technical choices section.
-- **Extra features**: Suggested and implemented UI polish like sort toggles, skeleton loaders, and edge case test fixes.
+- **Claude Opus**: Used for planning, architecture design, and code review.
+- **Gemini 3.1 Pro (in Antigravity)**: Used for code generation, automated testing, and the QA pass.
 
 All code in this repository was reviewed, understood, and can be modified by me. I can explain every design decision and implementation detail.

@@ -1,6 +1,6 @@
 # Support Ticket Dashboard — Implementation Plan (TASKS.md)
 
-> Total estimated time: **~5.5 hours** (30 min buffer within the 6-hour limit)
+> Total time spent: **[X] hours**
 > Key milestone: **Working end-to-end by Phase 3** (~2 hours in)
 
 ---
