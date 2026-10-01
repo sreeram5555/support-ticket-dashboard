@@ -60,7 +60,7 @@ const CreateTicket = () => {
       const data = await createTicket(formData);
       
       if (data.success) {
-        navigate(`/tickets/${data.data.id}`);
+        navigate('/', { state: { toastMessage: 'Ticket created successfully!' } });
       }
     } catch (err) {
       // Check if it's a validation error from backend (422)
