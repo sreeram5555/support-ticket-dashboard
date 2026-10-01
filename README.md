@@ -165,10 +165,11 @@ See `docs/ARCHITECTURE.md` for full API documentation.
 | Automated tests | 0.5 hours |
 | README, docs and screenshots | 0.5 hours |
 | QA pass and bug fixes | 1 hour |
+| Deployment and stabilization | 1 hour |
 | Extras beyond the required scope | 0.5 hours |
-| **Total** | **6.5 hours** |
+| **Total** | **7.5 hours** |
 
-The total time spent on this project was 6.5 hours. I can confirm that the core requirements were completed within the main build time, and part of this total time was spent reviewing, testing and understanding AI-generated code so that I can confidently explain and modify it.
+The total time spent on this project was 7.5 hours. I can confirm that the core requirements were completed within the main build time, and part of this total time was spent reviewing, testing and understanding AI-generated code so that I can confidently explain and modify it.
 
 ---
 
