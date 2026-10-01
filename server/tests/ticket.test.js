@@ -94,4 +94,27 @@ describe('Ticket API Endpoints', () => {
     expect(res.statusCode).toEqual(404);
     expect(res.body.success).toBe(false);
   });
+
+  it('should update ticket title and description', async () => {
+    const res = await request(app)
+      .patch(`/api/tickets/${createdTicketId}`)
+      .send({
+        title: 'Updated Title',
+        description: 'Updated Description'
+      });
+      
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.title).toBe('Updated Title');
+    expect(res.body.data.description).toBe('Updated Description');
+  });
+
+  it('should delete a ticket', async () => {
+    const deleteRes = await request(app).delete(`/api/tickets/${createdTicketId}`);
+    expect(deleteRes.statusCode).toEqual(200);
+    expect(deleteRes.body.success).toBe(true);
+
+    const getRes = await request(app).get(`/api/tickets/${createdTicketId}`);
+    expect(getRes.statusCode).toEqual(404);
+  });
 });
