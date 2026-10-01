@@ -133,4 +133,40 @@ describe('Ticket API Endpoints', () => {
     expect(res.statusCode).toEqual(422);
     expect(res.body.success).toBe(false);
   });
+
+  it('should accept a title of exactly 120 characters', async () => {
+    const res = await request(app)
+      .post('/api/tickets')
+      .send({
+        title: 'a'.repeat(120),
+        description: 'Test',
+        customer_email: 'test@example.com'
+      });
+    expect(res.statusCode).toEqual(201);
+  });
+
+  it('should return 422 for a title of exactly 121 characters', async () => {
+    const res = await request(app)
+      .post('/api/tickets')
+      .send({
+        title: 'a'.repeat(121),
+        description: 'Test',
+        customer_email: 'test@example.com'
+      });
+    expect(res.statusCode).toEqual(422);
+  });
+
+  it('should not return all tickets when searching for % or _', async () => {
+    await request(app).post('/api/tickets').send({ title: 'Ticket with %', description: 'Test', customer_email: 'test@test.com' });
+    await request(app).post('/api/tickets').send({ title: 'Ticket with _', description: 'Test', customer_email: 'test@test.com' });
+    await request(app).post('/api/tickets').send({ title: 'Regular Ticket', description: 'Test', customer_email: 'test@test.com' });
+    
+    const resPercent = await request(app).get('/api/tickets').query({ search: '%' });
+    expect(resPercent.body.data.length).toBe(1);
+    expect(resPercent.body.data[0].title).toBe('Ticket with %');
+
+    const resUnderscore = await request(app).get('/api/tickets').query({ search: '_' });
+    expect(resUnderscore.body.data.length).toBe(1);
+    expect(resUnderscore.body.data[0].title).toBe('Ticket with _');
+  });
 });

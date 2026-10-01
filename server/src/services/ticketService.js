@@ -57,8 +57,9 @@ const getTickets = ({ search, status, priority, sortOrder = 'desc', page = 1, pa
   const params = [];
 
   if (search) {
-    conditions.push('(title LIKE ? OR customer_email LIKE ?)');
-    params.push(`%${search}%`, `%${search}%`);
+    conditions.push("(title LIKE ? ESCAPE '\\' OR customer_email LIKE ? ESCAPE '\\')");
+    const escapedSearch = search.replace(/[\\%_]/g, '\\$&');
+    params.push(`%${escapedSearch}%`, `%${escapedSearch}%`);
   }
   
   if (status) {
