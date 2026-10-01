@@ -53,7 +53,8 @@ A full-stack web application for managing customer support tickets with search, 
 | Variable | Default | Description |
 |---|---|---|
 | `PORT` | `3001` | Backend server port |
-| `DB_PATH` | `./tickets.db` | SQLite database file path |
+| `DATABASE_URL` | `file:tickets.db` | Local SQLite file, or remote libsql:// URL |
+| `DATABASE_AUTH_TOKEN` | (Empty) | Turso auth token (required if remote) |
 | `NODE_ENV` | `development` | Environment (development/test/production) |
 
 See `.env.example` for a complete template.
@@ -69,11 +70,12 @@ This app can be deployed as a single web service on platforms like Render.
 3. **Environment Variables**:
    - `NODE_ENV`: `production`
    - `PORT`: (Provided by the host, e.g. `10000`)
-   - `DB_PATH`: `./tickets.db` (Default, stored in the container)
+   - `DATABASE_URL`: `libsql://your-database.turso.io`
+   - `DATABASE_AUTH_TOKEN`: `your-auth-token`
 
 **Notes**:
 - The free tier on Render spins down after inactivity, so the first load may take ~50 seconds.
-- Since SQLite writes to disk, database persistence depends on your hosting setup (e.g. Render free tier uses an ephemeral disk, so data will reset on next deploy or restart unless a persistent disk is attached).
+- The app uses **Turso (@libsql/client)** for SQLite database persistence. Production data will persist reliably regardless of ephemeral app containers.
 - The database is automatically seeded with 25 tickets upon the first production boot if it is empty.
 
 ## Running Tests
