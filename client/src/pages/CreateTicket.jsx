@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { createTicket } from '../api/ticketApi';
 import './CreateTicket.css';
 
-const TITLE_MAX_LENGTH = 120;
+import constants from '../../../server/src/constants.js';
+const { TITLE_MAX_LENGTH } = constants;
 
 const CreateTicket = () => {
   const navigate = useNavigate();
@@ -119,6 +120,7 @@ const CreateTicket = () => {
               onChange={handleChange}
               className={`form-input ${errors.title ? 'input-error' : ''}`}
               placeholder="Brief summary of the issue"
+              maxLength={TITLE_MAX_LENGTH}
             />
             <div className="field-footer">
               {errors.title ? (

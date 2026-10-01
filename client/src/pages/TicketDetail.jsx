@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getTicketById, updateTicket, deleteTicket } from '../api/ticketApi';
 import './TicketDetail.css';
+import constants from '../../../server/src/constants.js';
+const { TITLE_MAX_LENGTH } = constants;
 
 const TicketDetail = () => {
   const { id } = useParams();
@@ -158,7 +160,7 @@ const TicketDetail = () => {
               onChange={(e) => setUpdateTitle(e.target.value)}
               className="form-input"
               required
-              maxLength={100}
+              maxLength={TITLE_MAX_LENGTH}
             />
           </div>
           
