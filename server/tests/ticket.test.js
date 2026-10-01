@@ -4,14 +4,17 @@ const db = require('../src/config/database');
 
 // Note: DB_PATH=:memory: should be set when running tests.
 
-beforeAll(() => {
-  // Ensure table is clean before tests
-  db.prepare('DELETE FROM tickets').run();
-  db.prepare("DELETE FROM sqlite_sequence WHERE name='tickets'").run();
+beforeAll(async () => {
+  const { initDB, db } = require('../src/config/database');
+  await initDB();
+  await db.batch([
+    'DELETE FROM tickets',
+    "DELETE FROM sqlite_sequence WHERE name='tickets'"
+  ], 'write');
 });
 
-afterAll(() => {
-  // Close the DB connection
+afterAll(async () => {
+  const { db } = require('../src/config/database');
   db.close();
 });
 

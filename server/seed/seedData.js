@@ -36,30 +36,31 @@ const seedData = [
   }
 ];
 
-const seed = (clearFirst = true) => {
+const seed = async (clearFirst = true) => {
   console.log('Seeding database...');
   // Require dynamically to avoid circular dependency with config/database.js
-  const db = require('../src/config/database');
+  const { db, initDB } = require('../src/config/database');
   
-  const stmt = db.prepare(`
-    INSERT INTO tickets (title, description, customer_email, priority, status)
-    VALUES (?, ?, ?, ?, ?)
-  `);
-
-  const insertMany = db.transaction((tickets) => {
-    for (const ticket of tickets) {
-      stmt.run(ticket.title, ticket.description, ticket.customer_email, ticket.priority, ticket.status);
-    }
-  });
-
   try {
+    // Ensure table exists first if run standalone
     if (clearFirst) {
-      // Clear existing data
-      db.prepare('DELETE FROM tickets').run();
-      db.prepare("DELETE FROM sqlite_sequence WHERE name='tickets'").run();
+      await initDB();
     }
 
-    insertMany(seedData);
+    const stmts = [];
+    if (clearFirst) {
+      stmts.push('DELETE FROM tickets');
+      stmts.push("DELETE FROM sqlite_sequence WHERE name='tickets'");
+    }
+
+    for (const ticket of seedData) {
+      stmts.push({
+        sql: 'INSERT INTO tickets (title, description, customer_email, priority, status) VALUES (?, ?, ?, ?, ?)',
+        args: [ticket.title, ticket.description, ticket.customer_email, ticket.priority, ticket.status]
+      });
+    }
+
+    await db.batch(stmts, 'write');
     console.log('Database seeded successfully.');
   } catch (err) {
     console.error('Error seeding database:', err);
@@ -67,7 +68,7 @@ const seed = (clearFirst = true) => {
 };
 
 if (require.main === module) {
-  seed();
+  seed().then(() => process.exit(0));
 }
 
 module.exports = { seedData, seed };

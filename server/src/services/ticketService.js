@@ -1,17 +1,19 @@
-const db = require('../config/database');
+const { db } = require('../config/database');
 
 const createTicket = async ({ title, description, customer_email, priority = 'Medium' }) => {
-  const stmt = db.prepare(`
-    INSERT INTO tickets (title, description, customer_email, priority)
-    VALUES (?, ?, ?, ?)
-  `);
-  const info = stmt.run(title, description, customer_email, priority);
-  return await getTicketById(info.lastInsertRowid);
+  const rs = await db.execute({
+    sql: 'INSERT INTO tickets (title, description, customer_email, priority) VALUES (?, ?, ?, ?)',
+    args: [title, description, customer_email, priority]
+  });
+  return await getTicketById(Number(rs.lastInsertRowid));
 };
 
 const getTicketById = async (id) => {
-  const stmt = db.prepare('SELECT * FROM tickets WHERE id = ?');
-  return stmt.get(id);
+  const rs = await db.execute({
+    sql: 'SELECT * FROM tickets WHERE id = ?',
+    args: [id]
+  });
+  return rs.rows[0];
 };
 
 const updateTicket = async (id, { status, priority, title, description }) => {
@@ -40,12 +42,10 @@ const updateTicket = async (id, { status, priority, title, description }) => {
   updates.push("updated_at = datetime('now')");
   params.push(id);
   
-  const stmt = db.prepare(`
-    UPDATE tickets 
-    SET ${updates.join(', ')}
-    WHERE id = ?
-  `);
-  stmt.run(...params);
+  await db.execute({
+    sql: `UPDATE tickets SET ${updates.join(', ')} WHERE id = ?`,
+    args: params
+  });
   
   return await getTicketById(id);
 };
@@ -83,17 +83,19 @@ const getTickets = async ({ search, status, priority, sortOrder = 'desc', sortBy
   if (sortBy === 'created_asc') direction = 'ASC';
   if (sortBy === 'created_desc') direction = 'DESC';
   
-  query += ` ORDER BY created_at ${direction}`;
+  query += ` ORDER BY created_at ${direction}, id ${direction}`;
   
   const offset = (page - 1) * pageSize;
   query += ' LIMIT ? OFFSET ?';
   const dataParams = [...params, pageSize, offset];
 
-  const totalCount = db.prepare(countQuery).get(...params).count;
-  const tickets = db.prepare(query).all(...dataParams);
+  const totalCountRs = await db.execute({ sql: countQuery, args: params });
+  const totalCount = Number(totalCountRs.rows[0].count);
+  
+  const ticketsRs = await db.execute({ sql: query, args: dataParams });
 
   return {
-    data: tickets,
+    data: ticketsRs.rows,
     pagination: {
       page: parseInt(page, 10),
       pageSize: parseInt(pageSize, 10),
@@ -104,7 +106,7 @@ const getTickets = async ({ search, status, priority, sortOrder = 'desc', sortBy
 };
 
 const getStats = async () => {
-  const stmt = db.prepare(`
+  const rs = await db.execute(`
     SELECT 
       COUNT(*) as total,
       SUM(CASE WHEN status = 'Open' THEN 1 ELSE 0 END) as open,
@@ -112,19 +114,21 @@ const getStats = async () => {
       SUM(CASE WHEN status = 'Resolved' THEN 1 ELSE 0 END) as resolved
     FROM tickets
   `);
-  const row = stmt.get();
+  const row = rs.rows[0];
   return {
-    total: row.total || 0,
-    open: row.open || 0,
-    inProgress: row.inProgress || 0,
-    resolved: row.resolved || 0
+    total: Number(row.total) || 0,
+    open: Number(row.open) || 0,
+    inProgress: Number(row.inProgress) || 0,
+    resolved: Number(row.resolved) || 0
   };
 };
 
 const deleteTicket = async (id) => {
-  const stmt = db.prepare('DELETE FROM tickets WHERE id = ?');
-  const info = stmt.run(id);
-  return info.changes > 0;
+  const rs = await db.execute({
+    sql: 'DELETE FROM tickets WHERE id = ?',
+    args: [id]
+  });
+  return rs.rowsAffected > 0;
 };
 
 module.exports = {
