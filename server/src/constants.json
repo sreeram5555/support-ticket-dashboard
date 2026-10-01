@@ -1,0 +1,5 @@
+{
+  "STATUSES": ["Open", "In Progress", "Resolved"],
+  "PRIORITIES": ["Low", "Medium", "High"],
+  "TITLE_MAX_LENGTH": 120
+}

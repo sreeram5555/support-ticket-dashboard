@@ -1,5 +1,5 @@
 const { body, query, validationResult } = require('express-validator');
-const { STATUSES, PRIORITIES, TITLE_MAX_LENGTH } = require('../constants');
+const { STATUSES, PRIORITIES, TITLE_MAX_LENGTH } = require('../constants.json');
 
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);

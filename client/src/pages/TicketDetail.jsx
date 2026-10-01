@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getTicketById, updateTicket, deleteTicket } from '../api/ticketApi';
 import './TicketDetail.css';
-import constants from '../../../server/src/constants.js';
+import constants from '../../../server/src/constants.json';
 const { TITLE_MAX_LENGTH } = constants;
 
 const TicketDetail = () => {

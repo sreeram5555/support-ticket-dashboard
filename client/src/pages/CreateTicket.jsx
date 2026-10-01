@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { createTicket } from '../api/ticketApi';
 import './CreateTicket.css';
 
-import constants from '../../../server/src/constants.js';
+import constants from '../../../server/src/constants.json';
 const { TITLE_MAX_LENGTH } = constants;
 
 const CreateTicket = () => {
