@@ -64,7 +64,7 @@ See `.env.example` for a complete template.
 npm test
 ```
 
-This runs 7 automated tests covering:
+This runs 11 automated tests covering:
 - Input validation (missing title, invalid email, title length)
 - Query filtering + search + pagination
 - Ticket status/priority updates
@@ -146,7 +146,8 @@ See `docs/ARCHITECTURE.md` for full API documentation.
 | Frontend implementation | 30 min |
 | Testing | 10 min |
 | Documentation & polish | 10 min |
-| **Total** | **~1 hour 50 min** |
+| Extra Features & Polish (V2) | 45 min |
+| **Total** | **~2 hours 35 min** |
 
 ---
 
@@ -156,5 +157,6 @@ I used Gemini to assist with:
 - **Architecture planning**: Discussed requirements mapping, identified edge cases and ambiguities, designed API contracts and error formats.
 - **Code generation**: Generated boilerplate code for the React UI and Express routing.
 - **Documentation**: AI helped draft the README structure and technical choices section.
+- **Extra features**: Suggested and implemented UI polish like sort toggles, skeleton loaders, and edge case test fixes.
 
 All code in this repository was reviewed, understood, and can be modified by me. I can explain every design decision and implementation detail.
