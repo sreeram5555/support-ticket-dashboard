@@ -36,6 +36,15 @@ const validateCreateTicket = [
 ];
 
 const validateUpdateTicket = [
+  body('title')
+    .optional()
+    .trim()
+    .notEmpty().withMessage('Title cannot be empty if provided')
+    .isLength({ max: TITLE_MAX_LENGTH }).withMessage(`Title must be at most ${TITLE_MAX_LENGTH} characters`),
+  body('description')
+    .optional()
+    .trim()
+    .notEmpty().withMessage('Description cannot be empty if provided'),
   body('status')
     .optional()
     .isIn(STATUSES).withMessage(`Status must be one of: ${STATUSES.join(', ')}`),
@@ -43,12 +52,12 @@ const validateUpdateTicket = [
     .optional()
     .isIn(PRIORITIES).withMessage(`Priority must be one of: ${PRIORITIES.join(', ')}`),
   (req, res, next) => {
-    if (!req.body.status && !req.body.priority) {
+    if (!req.body.status && !req.body.priority && !req.body.title && !req.body.description) {
       return res.status(400).json({
         success: false,
         error: {
           code: 400,
-          message: 'At least one field (status or priority) must be provided for update',
+          message: 'At least one field must be provided for update',
           details: []
         }
       });

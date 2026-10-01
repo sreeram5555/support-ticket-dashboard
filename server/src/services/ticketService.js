@@ -14,7 +14,7 @@ const getTicketById = (id) => {
   return stmt.get(id);
 };
 
-const updateTicket = (id, { status, priority }) => {
+const updateTicket = (id, { status, priority, title, description }) => {
   const updates = [];
   const params = [];
   
@@ -25,6 +25,14 @@ const updateTicket = (id, { status, priority }) => {
   if (priority) {
     updates.push('priority = ?');
     params.push(priority);
+  }
+  if (title) {
+    updates.push('title = ?');
+    params.push(title);
+  }
+  if (description) {
+    updates.push('description = ?');
+    params.push(description);
   }
   
   if (updates.length === 0) return getTicketById(id);
