@@ -45,11 +45,20 @@ const TicketDetail = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    
+    const trimmedTitle = updateTitle.trim();
+    const trimmedDescription = updateDescription.trim();
+    
+    if (!trimmedTitle || !trimmedDescription) {
+      setUpdateError('Title and description cannot be empty.');
+      return;
+    }
+    
     if (
       updateStatus === ticket.status && 
       updatePriority === ticket.priority &&
-      updateTitle === ticket.title &&
-      updateDescription === ticket.description
+      trimmedTitle === ticket.title &&
+      trimmedDescription === ticket.description
     ) {
       return; // No changes
     }
@@ -58,8 +67,8 @@ const TicketDetail = () => {
       setUpdating(true);
       setUpdateError(null);
       const data = await updateTicket(id, {
-        title: updateTitle,
-        description: updateDescription,
+        title: trimmedTitle,
+        description: trimmedDescription,
         status: updateStatus,
         priority: updatePriority
       });
@@ -208,8 +217,8 @@ const TicketDetail = () => {
               updating || 
               (updateStatus === ticket.status && 
                updatePriority === ticket.priority && 
-               updateTitle === ticket.title && 
-               updateDescription === ticket.description)
+               updateTitle.trim() === ticket.title && 
+               updateDescription.trim() === ticket.description)
             }
           >
             {updating ? 'Saving...' : 'Save Changes'}

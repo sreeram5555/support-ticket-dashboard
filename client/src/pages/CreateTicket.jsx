@@ -57,7 +57,12 @@ const CreateTicket = () => {
     try {
       setSubmitting(true);
       setSubmitError(null);
-      const data = await createTicket(formData);
+      const data = await createTicket({
+        ...formData,
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        customer_email: formData.customer_email.trim()
+      });
       
       if (data.success) {
         navigate('/', { state: { toastMessage: 'Ticket created successfully!' } });
