@@ -1,5 +1,3 @@
-const db = require('../src/config/database');
-
 const seedData = [
   {
     title: 'Cannot login to my account',
@@ -40,6 +38,8 @@ const seedData = [
 
 const seed = (clearFirst = true) => {
   console.log('Seeding database...');
+  // Require dynamically to avoid circular dependency with config/database.js
+  const db = require('../src/config/database');
   
   const stmt = db.prepare(`
     INSERT INTO tickets (title, description, customer_email, priority, status)
