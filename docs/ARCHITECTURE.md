@@ -259,7 +259,8 @@ Generate **25 tickets** with the following distribution:
 | `GET` | `/api/tickets/stats` | Summary counts | 200 |
 | `GET` | `/api/tickets/:id` | Get single ticket | 200 |
 | `POST` | `/api/tickets` | Create ticket | 201 |
-| `PATCH` | `/api/tickets/:id` | Update ticket (status, priority) | 200 |
+| `PATCH` | `/api/tickets/:id` | Update ticket details | 200 |
+| `DELETE` | `/api/tickets/:id` | Delete ticket | 200 |
 
 > **Important**: Define the `/api/tickets/stats` route BEFORE `/api/tickets/:id` in the router so `stats` isn't interpreted as an `:id` parameter.
 
@@ -627,7 +628,7 @@ graph LR
 | 3 | What if page is out of range? | Return empty `data: []` with correct `totalPages`. No error. |
 | 4 | Are summary counts filtered or global? | Global (assignment says "regardless of active filters") |
 | 5 | Should stats refresh after create/update? | Yes — frontend re-fetches stats after any mutation |
-| 6 | Can users update title/description/email? | No — assignment says "update its status and priority" only |
+| 6 | Can users update title/description/email? | Title and description can be updated, email cannot. |
 | 7 | Is pageSize fixed at 10 or configurable? | Default 10 but backend accepts pageSize param for flexibility |
 | 8 | What happens on concurrent edits? | Out of scope — no locking needed for a single-user app |
 | 9 | Should the app use server-side rendering? | No — SPA is simpler and sufficient for this assignment |
