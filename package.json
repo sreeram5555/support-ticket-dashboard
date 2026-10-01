@@ -11,7 +11,7 @@
     "test": "cd server && npm test"
   },
   "engines": {
-    "node": ">=18.x"
+    "node": "24.x"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
