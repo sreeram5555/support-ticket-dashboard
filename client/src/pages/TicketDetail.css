@@ -1,0 +1,124 @@
+.ticket-detail-page {
+  padding-bottom: var(--space-xl);
+}
+
+.ticket-content-wrapper {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-xl);
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow);
+}
+
+.ticket-title-large {
+  font-size: var(--font-size-xl);
+  margin-top: 0;
+  margin-bottom: var(--space-lg);
+  color: var(--color-text);
+}
+
+.ticket-meta-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.meta-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.meta-value {
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.ticket-description-box h3 {
+  margin-top: 0;
+  margin-bottom: var(--space-md);
+  font-size: var(--font-size-lg);
+}
+
+.description-text {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.update-form .form-group {
+  margin-bottom: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.update-form label {
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.form-input {
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.btn-secondary {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  padding: var(--space-sm) var(--space-md);
+  font-weight: 500;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-bg);
+  border-color: var(--color-text-muted);
+}
+
+.small-error {
+  padding: var(--space-sm);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-md);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ticket-content-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
