@@ -1,20 +1,20 @@
 const db = require('../config/database');
 
-const createTicket = ({ title, description, customer_email, priority = 'Medium' }) => {
+const createTicket = async ({ title, description, customer_email, priority = 'Medium' }) => {
   const stmt = db.prepare(`
     INSERT INTO tickets (title, description, customer_email, priority)
     VALUES (?, ?, ?, ?)
   `);
   const info = stmt.run(title, description, customer_email, priority);
-  return getTicketById(info.lastInsertRowid);
+  return await getTicketById(info.lastInsertRowid);
 };
 
-const getTicketById = (id) => {
+const getTicketById = async (id) => {
   const stmt = db.prepare('SELECT * FROM tickets WHERE id = ?');
   return stmt.get(id);
 };
 
-const updateTicket = (id, { status, priority, title, description }) => {
+const updateTicket = async (id, { status, priority, title, description }) => {
   const updates = [];
   const params = [];
   
@@ -35,7 +35,7 @@ const updateTicket = (id, { status, priority, title, description }) => {
     params.push(description);
   }
   
-  if (updates.length === 0) return getTicketById(id);
+  if (updates.length === 0) return await getTicketById(id);
   
   updates.push("updated_at = datetime('now')");
   params.push(id);
@@ -47,10 +47,10 @@ const updateTicket = (id, { status, priority, title, description }) => {
   `);
   stmt.run(...params);
   
-  return getTicketById(id);
+  return await getTicketById(id);
 };
 
-const getTickets = ({ search, status, priority, sortOrder = 'desc', sortBy, page = 1, pageSize = 10 }) => {
+const getTickets = async ({ search, status, priority, sortOrder = 'desc', sortBy, page = 1, pageSize = 10 }) => {
   let query = 'SELECT * FROM tickets';
   let countQuery = 'SELECT COUNT(*) as count FROM tickets';
   const conditions = [];
@@ -103,7 +103,7 @@ const getTickets = ({ search, status, priority, sortOrder = 'desc', sortBy, page
   };
 };
 
-const getStats = () => {
+const getStats = async () => {
   const stmt = db.prepare(`
     SELECT 
       COUNT(*) as total,
@@ -121,7 +121,7 @@ const getStats = () => {
   };
 };
 
-const deleteTicket = (id) => {
+const deleteTicket = async (id) => {
   const stmt = db.prepare('DELETE FROM tickets WHERE id = ?');
   const info = stmt.run(id);
   return info.changes > 0;
