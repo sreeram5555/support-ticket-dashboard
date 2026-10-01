@@ -78,7 +78,8 @@ This runs 7 automated tests covering:
 | `GET` | `/api/tickets/stats` | Get summary counts |
 | `GET` | `/api/tickets/:id` | Get single ticket |
 | `POST` | `/api/tickets` | Create new ticket |
-| `PATCH` | `/api/tickets/:id` | Update ticket status/priority |
+| `PATCH` | `/api/tickets/:id` | Update ticket details (status, priority, title, description) |
+| `DELETE` | `/api/tickets/:id` | Delete a ticket |
 
 See `docs/ARCHITECTURE.md` for full API documentation.
 
@@ -124,10 +125,9 @@ See `docs/ARCHITECTURE.md` for full API documentation.
 1. Search is partial and case-insensitive (matches substrings of title or email).
 2. Out-of-range page numbers return an empty data array (not an error).
 3. Summary counts always reflect the full dataset, not filtered results (per assignment wording).
-4. Only status and priority are updatable (not title, description, or email) on existing tickets.
-5. Page size is fixed at 10 tickets per page.
-6. The application is single-user (no concurrent editing concerns).
-7. Timestamps use ISO 8601 format (UTC).
+4. Page size is fixed at 10 tickets per page.
+5. The application is single-user (no concurrent editing concerns).
+6. Timestamps use ISO 8601 format (UTC).
 
 ### Known Limitations
 
