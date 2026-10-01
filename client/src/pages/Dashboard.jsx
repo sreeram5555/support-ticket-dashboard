@@ -111,16 +111,23 @@ const Dashboard = () => {
 
       {error && <div className="error-banner">{error}</div>}
       
-      {loading ? (
-        <div className="loading-state">Loading stats...</div>
-      ) : (
-        <div className="summary-widgets">
-          <SummaryWidget title="Total Tickets" count={stats.total} type="neutral" />
-          <SummaryWidget title="Open" count={stats.open} type="warning" />
-          <SummaryWidget title="In Progress" count={stats.inProgress} type="primary" />
-          <SummaryWidget title="Resolved" count={stats.resolved} type="success" />
-        </div>
-      )}
+      <div className="summary-widgets">
+        {loading ? (
+          <>
+            <SummaryWidget loading={true} />
+            <SummaryWidget loading={true} />
+            <SummaryWidget loading={true} />
+            <SummaryWidget loading={true} />
+          </>
+        ) : (
+          <>
+            <SummaryWidget title="Total Tickets" count={stats.total} type="neutral" />
+            <SummaryWidget title="Open" count={stats.open} type="warning" />
+            <SummaryWidget title="In Progress" count={stats.inProgress} type="primary" />
+            <SummaryWidget title="Resolved" count={stats.resolved} type="success" />
+          </>
+        )}
+      </div>
 
       <div className="ticket-list-section">
         <h2>Tickets</h2>

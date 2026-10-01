@@ -31,4 +31,27 @@
 .widget-primary .widget-count { color: var(--color-primary); }
 .widget-success .widget-count { color: var(--color-success); }
 
-/* Dashboard layout styles to go in App.css */
+/* Skeleton Loading State */
+.widget-skeleton .skeleton-title {
+  height: 16px;
+  width: 60%;
+  margin: 0 auto 16px auto;
+  background-color: var(--color-border);
+  border-radius: var(--radius);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.widget-skeleton .skeleton-count {
+  height: 40px;
+  width: 40%;
+  margin: 0 auto;
+  background-color: var(--color-border);
+  border-radius: var(--radius);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
