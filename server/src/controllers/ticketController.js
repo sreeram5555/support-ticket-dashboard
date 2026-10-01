@@ -68,10 +68,30 @@ const getStats = (req, res, next) => {
   }
 };
 
+const deleteTicket = (req, res, next) => {
+  try {
+    const deleted = ticketService.deleteTicket(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: 404,
+          message: 'Ticket not found',
+          details: []
+        }
+      });
+    }
+    res.status(200).json({ success: true, data: { message: 'Ticket deleted successfully' } });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createTicket,
   getTickets,
   getTicketById,
   updateTicket,
-  getStats
+  getStats,
+  deleteTicket
 };

@@ -11,5 +11,6 @@ router.post('/', validators.validateCreateTicket, ticketController.createTicket)
 
 router.get('/:id', ticketController.getTicketById);
 router.patch('/:id', validators.validateUpdateTicket, ticketController.updateTicket);
+router.delete('/:id', ticketController.deleteTicket);
 
 module.exports = router;

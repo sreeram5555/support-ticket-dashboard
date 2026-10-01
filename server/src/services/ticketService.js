@@ -108,10 +108,17 @@ const getStats = () => {
   };
 };
 
+const deleteTicket = (id) => {
+  const stmt = db.prepare('DELETE FROM tickets WHERE id = ?');
+  const info = stmt.run(id);
+  return info.changes > 0;
+};
+
 module.exports = {
   createTicket,
   getTicketById,
   updateTicket,
   getTickets,
-  getStats
+  getStats,
+  deleteTicket
 };
