@@ -58,6 +58,24 @@ A full-stack web application for managing customer support tickets with search, 
 
 See `.env.example` for a complete template.
 
+## Deployment
+
+This app can be deployed as a single web service on platforms like Render.
+
+**Live URL**: [https://your-app-url.onrender.com](https://your-app-url.onrender.com)
+
+1. **Build Command**: `npm run build`
+2. **Start Command**: `npm run start`
+3. **Environment Variables**:
+   - `NODE_ENV`: `production`
+   - `PORT`: (Provided by the host, e.g. `10000`)
+   - `DB_PATH`: `./tickets.db` (Default, stored in the container)
+
+**Notes**:
+- The free tier on Render spins down after inactivity, so the first load may take ~50 seconds.
+- Since SQLite writes to disk, database persistence depends on your hosting setup (e.g. Render free tier uses an ephemeral disk, so data will reset on next deploy or restart unless a persistent disk is attached).
+- The database is automatically seeded with 25 tickets upon the first production boot if it is empty.
+
 ## Running Tests
 
 ```bash
@@ -132,10 +150,9 @@ See `docs/ARCHITECTURE.md` for full API documentation.
 ### Known Limitations
 
 1. **No authentication** — intentionally excluded per assignment scope.
-2. **No deployment** — runs locally only, as specified.
-3. **No real-time updates** — requires page refresh or re-fetch to see changes by other users.
-4. **SQLite limitations** — not suitable for production with concurrent writes; sufficient for this use case.
-5. **No client-side caching** — every navigation re-fetches data from the API.
+2. **No real-time updates** — requires page refresh or re-fetch to see changes by other users.
+3. **SQLite limitations** — not suitable for production with concurrent writes; sufficient for this use case.
+4. **No client-side caching** — every navigation re-fetches data from the API.
 
 ### Time Spent
 
