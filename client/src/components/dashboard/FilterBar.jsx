@@ -64,6 +64,20 @@ const FilterBar = ({ filters, onFilterChange }) => {
           <option value="Low">Low</option>
         </select>
       </div>
+
+      <div className="filter-group">
+        <label htmlFor="sortOrder">Sort</label>
+        <select 
+          id="sortOrder" 
+          name="sortOrder" 
+          value={filters.sortOrder} 
+          onChange={handleChange}
+          className="filter-input"
+        >
+          <option value="desc">Newest First</option>
+          <option value="asc">Oldest First</option>
+        </select>
+      </div>
     </div>
   );
 };

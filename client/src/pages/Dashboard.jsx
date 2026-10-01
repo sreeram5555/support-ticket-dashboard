@@ -23,11 +23,11 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const [listError, setListError] = useState(null);
 
-  // Derive filters from URL
   const filters = {
     search: searchParams.get('search') || '',
     status: searchParams.get('status') || '',
     priority: searchParams.get('priority') || '',
+    sortOrder: searchParams.get('sortOrder') || 'desc',
     page: parseInt(searchParams.get('page')) || 1,
     pageSize: 10
   };
@@ -70,7 +70,7 @@ const Dashboard = () => {
     } finally {
       setListLoading(false);
     }
-  }, [filters.search, filters.status, filters.priority, filters.page, filters.pageSize]);
+  }, [filters.search, filters.status, filters.priority, filters.sortOrder, filters.page, filters.pageSize]);
 
   useEffect(() => {
     fetchTickets();
@@ -81,6 +81,7 @@ const Dashboard = () => {
     if (newFilters.search) params.set('search', newFilters.search);
     if (newFilters.status) params.set('status', newFilters.status);
     if (newFilters.priority) params.set('priority', newFilters.priority);
+    if (newFilters.sortOrder && newFilters.sortOrder !== 'desc') params.set('sortOrder', newFilters.sortOrder);
     // Reset to page 1 on filter change
     params.set('page', '1');
     setSearchParams(params);
