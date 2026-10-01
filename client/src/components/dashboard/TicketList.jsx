@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import StatusBadge from '../common/StatusBadge';
 import './TicketList.css';
 
 const TicketList = ({ tickets, loading, error }) => {
@@ -13,24 +14,6 @@ const TicketList = ({ tickets, loading, error }) => {
   if (!tickets || tickets.length === 0) {
     return <div className="ticket-list-empty">No tickets found matching your criteria.</div>;
   }
-
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Open': return 'status-open';
-      case 'In Progress': return 'status-progress';
-      case 'Resolved': return 'status-resolved';
-      default: return '';
-    }
-  };
-
-  const getPriorityClass = (priority) => {
-    switch (priority) {
-      case 'High': return 'priority-high';
-      case 'Medium': return 'priority-medium';
-      case 'Low': return 'priority-low';
-      default: return '';
-    }
-  };
 
   return (
     <div className="table-container">
@@ -53,14 +36,10 @@ const TicketList = ({ tickets, loading, error }) => {
               <td className="ticket-title">{ticket.title}</td>
               <td>{ticket.customer_email}</td>
               <td>
-                <span className={`badge ${getStatusClass(ticket.status)}`}>
-                  {ticket.status}
-                </span>
+                <StatusBadge type="status" value={ticket.status} />
               </td>
               <td>
-                <span className={`badge ${getPriorityClass(ticket.priority)}`}>
-                  {ticket.priority}
-                </span>
+                <StatusBadge type="priority" value={ticket.priority} />
               </td>
               <td>{new Date(ticket.created_at).toLocaleDateString()}</td>
               <td>

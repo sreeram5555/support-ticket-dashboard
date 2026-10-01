@@ -1,0 +1,16 @@
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-open { background-color: #fee2e2; color: #b91c1c; }
+.status-progress { background-color: #dbeafe; color: #1d4ed8; }
+.status-resolved { background-color: #dcfce7; color: #15803d; }
+
+.priority-high { background-color: #fef3c7; color: #b45309; }
+.priority-medium { background-color: #f3f4f6; color: #374151; }
+.priority-low { background-color: #e0e7ff; color: #4338ca; }
