@@ -38,7 +38,7 @@ const seedData = [
   }
 ];
 
-const seed = () => {
+const seed = (clearFirst = true) => {
   console.log('Seeding database...');
   
   const stmt = db.prepare(`
@@ -53,9 +53,11 @@ const seed = () => {
   });
 
   try {
-    // Clear existing data (optional, but good for resetting)
-    db.prepare('DELETE FROM tickets').run();
-    db.prepare("DELETE FROM sqlite_sequence WHERE name='tickets'").run();
+    if (clearFirst) {
+      // Clear existing data
+      db.prepare('DELETE FROM tickets').run();
+      db.prepare("DELETE FROM sqlite_sequence WHERE name='tickets'").run();
+    }
 
     insertMany(seedData);
     console.log('Database seeded successfully.');
@@ -64,4 +66,8 @@ const seed = () => {
   }
 };
 
-seed();
+if (require.main === module) {
+  seed();
+}
+
+module.exports = { seedData, seed };
