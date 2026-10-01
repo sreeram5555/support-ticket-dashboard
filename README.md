@@ -133,7 +133,7 @@ See `docs/ARCHITECTURE.md` for full API documentation.
 
 | Choice | Reasoning |
 |---|---|
-| **SQLite (better-sqlite3)** | Zero-config database — no install, no server process, runs from a single file. Synchronous API simplifies error handling. Perfect for a local-first app with one table. |
+| **Turso (@libsql/client)** | Replaces the file-based SQLite database with a serverless edge database using SQLite SQL dialect. Preserves API compatibility while fixing the Render ephemeral disk problem, ensuring tickets created on the live environment survive restarts. |
 | **React + Vite** | Vite provides instant dev server startup and HMR. React is widely known, making the code easy for reviewers to follow. |
 | **Express.js** | Industry standard for Node.js APIs. Minimal boilerplate, large ecosystem, easy to extend. |
 | **express-validator** | Declarative validation chains that integrate cleanly with Express middleware. Produces structured errors for frontend consumption. |
