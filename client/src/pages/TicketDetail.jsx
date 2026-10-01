@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getTicketById, updateTicket } from '../api/ticketApi';
+import { getTicketById, updateTicket, deleteTicket } from '../api/ticketApi';
 import './TicketDetail.css';
 
 const TicketDetail = () => {
@@ -11,10 +11,15 @@ const TicketDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
+  const [updateTitle, setUpdateTitle] = useState('');
+  const [updateDescription, setUpdateDescription] = useState('');
   const [updateStatus, setUpdateStatus] = useState('');
   const [updatePriority, setUpdatePriority] = useState('');
+  
   const [updating, setUpdating] = useState(false);
   const [updateError, setUpdateError] = useState(null);
+  
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     const fetchTicket = async () => {
@@ -23,6 +28,8 @@ const TicketDetail = () => {
         const data = await getTicketById(id);
         if (data.success) {
           setTicket(data.data);
+          setUpdateTitle(data.data.title);
+          setUpdateDescription(data.data.description);
           setUpdateStatus(data.data.status);
           setUpdatePriority(data.data.priority);
         }
@@ -38,7 +45,12 @@ const TicketDetail = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (updateStatus === ticket.status && updatePriority === ticket.priority) {
+    if (
+      updateStatus === ticket.status && 
+      updatePriority === ticket.priority &&
+      updateTitle === ticket.title &&
+      updateDescription === ticket.description
+    ) {
       return; // No changes
     }
 
@@ -46,17 +58,40 @@ const TicketDetail = () => {
       setUpdating(true);
       setUpdateError(null);
       const data = await updateTicket(id, {
+        title: updateTitle,
+        description: updateDescription,
         status: updateStatus,
         priority: updatePriority
       });
       
       if (data.success) {
-        setTicket(data.data);
+        navigate('/', { state: { toastMessage: 'Ticket updated successfully!' } });
       }
     } catch (err) {
-      setUpdateError(err.message || 'Failed to update ticket.');
+      let errorMessage = err.message || 'Failed to update ticket.';
+      if (err.error && err.error.details && err.error.details.length > 0) {
+        errorMessage = err.error.details.map(d => d.message).join(', ');
+      }
+      setUpdateError(errorMessage);
     } finally {
       setUpdating(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm('Are you sure you want to delete this ticket? This action cannot be undone.')) {
+      return;
+    }
+    
+    try {
+      setDeleting(true);
+      const data = await deleteTicket(id);
+      if (data.success) {
+        navigate('/', { state: { toastMessage: 'Ticket deleted successfully!' } });
+      }
+    } catch (err) {
+      setUpdateError(err.message || 'Failed to delete ticket.');
+      setDeleting(false);
     }
   };
 
@@ -75,14 +110,37 @@ const TicketDetail = () => {
     <div className="ticket-detail-page">
       <header className="page-header">
         <h1>Ticket #{ticket.id}</h1>
-        <button className="btn-secondary" onClick={() => navigate(-1)}>
-          &larr; Back
-        </button>
+        <div className="header-actions">
+          <button 
+            className="btn-secondary" 
+            style={{ color: '#dc2626', borderColor: '#fca5a5', marginRight: '1rem' }}
+            onClick={handleDelete}
+            disabled={deleting}
+          >
+            {deleting ? 'Deleting...' : 'Delete Ticket'}
+          </button>
+          <button className="btn-secondary" onClick={() => navigate(-1)}>
+            &larr; Back
+          </button>
+        </div>
       </header>
 
-      <div className="ticket-content-wrapper">
+      {updateError && <div className="error-banner">{updateError}</div>}
+
+      <form onSubmit={handleUpdate} className="ticket-content-wrapper">
         <div className="ticket-main-info card">
-          <h2 className="ticket-title-large">{ticket.title}</h2>
+          <div className="form-group">
+            <label htmlFor="title">Title</label>
+            <input
+              id="title"
+              type="text"
+              value={updateTitle}
+              onChange={(e) => setUpdateTitle(e.target.value)}
+              className="form-input"
+              required
+              maxLength={100}
+            />
+          </div>
           
           <div className="ticket-meta-info">
             <div className="meta-item">
@@ -99,56 +157,65 @@ const TicketDetail = () => {
             </div>
           </div>
 
-          <div className="ticket-description-box">
-            <h3>Description</h3>
-            <p className="description-text">{ticket.description}</p>
+          <div className="form-group" style={{ marginTop: '1.5rem' }}>
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              value={updateDescription}
+              onChange={(e) => setUpdateDescription(e.target.value)}
+              className="form-input"
+              rows={6}
+              required
+            />
           </div>
         </div>
 
         <div className="ticket-sidebar card">
-          <h3>Update Ticket</h3>
+          <h3>Ticket Settings</h3>
           
-          {updateError && <div className="error-banner small-error">{updateError}</div>}
-          
-          <form onSubmit={handleUpdate} className="update-form">
-            <div className="form-group">
-              <label htmlFor="status">Status</label>
-              <select 
-                id="status" 
-                value={updateStatus} 
-                onChange={(e) => setUpdateStatus(e.target.value)}
-                className="form-input"
-              >
-                <option value="Open">Open</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Resolved">Resolved</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="priority">Priority</label>
-              <select 
-                id="priority" 
-                value={updatePriority} 
-                onChange={(e) => setUpdatePriority(e.target.value)}
-                className="form-input"
-              >
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-              </select>
-            </div>
-
-            <button 
-              type="submit" 
-              className="btn-primary full-width" 
-              disabled={updating || (updateStatus === ticket.status && updatePriority === ticket.priority)}
+          <div className="form-group">
+            <label htmlFor="status">Status</label>
+            <select 
+              id="status" 
+              value={updateStatus} 
+              onChange={(e) => setUpdateStatus(e.target.value)}
+              className="form-input"
             >
-              {updating ? 'Updating...' : 'Save Changes'}
-            </button>
-          </form>
+              <option value="Open">Open</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="priority">Priority</label>
+            <select 
+              id="priority" 
+              value={updatePriority} 
+              onChange={(e) => setUpdatePriority(e.target.value)}
+              className="form-input"
+            >
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+
+          <button 
+            type="submit" 
+            className="btn-primary full-width" 
+            disabled={
+              updating || 
+              (updateStatus === ticket.status && 
+               updatePriority === ticket.priority && 
+               updateTitle === ticket.title && 
+               updateDescription === ticket.description)
+            }
+          >
+            {updating ? 'Saving...' : 'Save Changes'}
+          </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

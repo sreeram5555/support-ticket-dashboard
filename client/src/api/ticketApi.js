@@ -43,3 +43,7 @@ export const createTicket = (data) => {
 export const updateTicket = (id, data) => {
   return apiClient.patch(`/tickets/${id}`, data);
 };
+
+export const deleteTicket = (id) => {
+  return apiClient.delete(`/tickets/${id}`);
+};
