@@ -31,6 +31,8 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_tickets_email ON tickets(customer_email COLLATE NOCASE);
 `);
 
+module.exports = db;
+
 // Auto-seed in production if empty
 if (process.env.NODE_ENV === 'production') {
   const count = db.prepare('SELECT COUNT(*) as count FROM tickets').get().count;
@@ -40,5 +42,3 @@ if (process.env.NODE_ENV === 'production') {
     seed(false); // seed without clearing
   }
 }
-
-module.exports = db;
