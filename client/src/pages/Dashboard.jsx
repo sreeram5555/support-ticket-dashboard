@@ -35,10 +35,10 @@ const Dashboard = () => {
   useEffect(() => {
     if (location.state && location.state.toastMessage) {
       setToastMessage(location.state.toastMessage);
-      // Clear state so refresh doesn't show toast again
-      window.history.replaceState({}, document.title);
+      // Clear state using React Router navigate so it doesn't show again on refresh
+      navigate(location.pathname + location.search, { replace: true, state: {} });
     }
-  }, [location]);
+  }, [location, navigate]);
 
   useEffect(() => {
     const fetchStats = async () => {

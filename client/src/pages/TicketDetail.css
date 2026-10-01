@@ -63,19 +63,22 @@
   margin: 0;
 }
 
-.update-form .form-group {
+.ticket-content-wrapper .form-group {
   margin-bottom: var(--space-lg);
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
+  width: 100%;
 }
 
-.update-form label {
+.ticket-content-wrapper label {
   font-weight: 500;
   color: var(--color-text-muted);
 }
 
 .form-input {
+  width: 100%;
+  box-sizing: border-box;
   padding: 0.75rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
